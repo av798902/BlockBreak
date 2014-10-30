@@ -181,7 +181,7 @@ $(function() {
     }));
 	
     stage.insert(new Q.UI.Text({ 
-      label: "Game Over\n You Win",
+      label: "Game Over\n  You Win",
       color: "white",
       x: 0,
       y: 0
