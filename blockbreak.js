@@ -1,12 +1,12 @@
 $(function() {
   var Q = window.Q = Quintus({audioSupported: [ 'mp3' ]})
-                     .include('Audio,Input,Sprites,Scenes,UI')
+                     .include('Audio,Input,Sprites,Scenes,UI,Touch')
                      .setup()
 					 .enableSound();
 					 
   Q.input.keyboardControls();
   Q.input.touchControls({ 
-            controls:  [ ['left','<' ],[],[],[],['right','>' ] ]
+            controls:  [ ['left','<' ],[],[/*'down','v'*/],[],['right','>' ] ]
   });
 	Q.audio.enableHTML5Sound();
 	Q.audio.enableWebAudioSound();
@@ -32,7 +32,7 @@ $(function() {
     step: function(dt) {
       if(Q.inputs['left']) { 
         this.p.x -= dt * this.p.speed;
-      } if(Q.inputs['right']) {
+      } else if(Q.inputs['right']) {
         this.p.x += dt * this.p.speed;
       }
       if(this.p.x < 30) { 
@@ -76,7 +76,7 @@ $(function() {
 			p.y = 0;
 			p.dy = 1;
 		  } else if(p.y > Q.height) { 
-			Q.stageScene('game');
+			Q.stageScene('gameOver');
 		  }
 	  });
     },
@@ -126,14 +126,13 @@ $(function() {
       stage.on('removeBlock',function() {
         blockCount--;
         if(blockCount == 0) {
-          Q.stageScene('game');
+          Q.stageScene('winGame');
         }
       });
-
+		
     }));
 	
 	Q.scene('startScreen',new Q.Scene(function(stage) {
-	
 	var container = stage.insert(new Q.UI.Container({
       fill: "grey",
       border: 5,
@@ -149,14 +148,46 @@ $(function() {
       x: 0,
       y: 0
     }),container); 
-	
 	container.fit(20,20); 
-	if(Q.inputs['left']){
-		Q.stageScene('game');
-	}
     }));
     
-	//Q.stageScene('startScreen');
+	Q.scene('gameOver',new Q.Scene(function(stage) {
+	var container = stage.insert(new Q.UI.Container({
+      fill: "black",
+      border: 5,
+      shadow: 10,
+      shadowColor: "rgba(0,0,0,0.5)",
+      y: Q.height/2,
+      x: Q.width/2
+    }));
+	
+    stage.insert(new Q.UI.Text({ 
+      label: "Game Over\n You Lose",
+      color: "white",
+      x: 0,
+      y: 0
+    }),container); 
+	container.fit(Q.width,Q.height); 
+    }));
+	
+	Q.scene('winGame',new Q.Scene(function(stage) {
+	var container = stage.insert(new Q.UI.Container({
+      fill: "black",
+      border: 5,
+      shadow: 10,
+      shadowColor: "rgba(0,0,0,0.5)",
+      y: Q.height/2,
+      x: Q.width/2
+    }));
+	
+    stage.insert(new Q.UI.Text({ 
+      label: "Game Over\n You Win",
+      color: "white",
+      x: 0,
+      y: 0
+    }),container); 
+	container.fit(Q.width,Q.height); 
+    }));
 
     Q.stageScene('game');
   });  
