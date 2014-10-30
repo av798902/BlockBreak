@@ -1,3 +1,5 @@
+var points = 0; //points to display later
+var lives = 3; //lives to display later
 $(function() {
   var Q = window.Q = Quintus({audioSupported: [ 'mp3' ]})
                      .include('Audio,Input,Sprites,Scenes,UI,Touch')
@@ -14,7 +16,9 @@ $(function() {
   //Q.load(["bumper.mp3"]);
   //Q.load(["ping.mp3"]);
   //Q.load(["pop.mp3"]);
-	
+  
+  
+  
   Q.Sprite.extend("Paddle", {     // extend Sprite class to create Q.Paddle subclass
     init: function(p) {
       this._super(p, {
@@ -140,14 +144,14 @@ $(function() {
       y: 6,
       x: Q.width/2
       }));
-	
+	  
       stage.insert(new Q.UI.Text({ 
-      label: "Block Break" ,
+      label: "Points: " + points ,
       color: "White",
       x: 0,
       y: 0
       }),container); 
-	  container.fit(10,6); 
+	  //container.fit(Q.height,6); 
 	  /////////////////////////
 		
     }));
