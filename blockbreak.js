@@ -72,11 +72,11 @@ $(function() {
 			p.x = Q.width - p.w;
 		  }
 
-		  if(p.y < 0) {
-			p.y = 0;
+		  if(p.y <= 50) {
+			p.y = 50;
 			p.dy = 1;
 		  } else if(p.y > Q.height) { 
-			Q.stageScene('gameOver');
+			Q.stageScene('gameOver');		
 		  }
 	  });
     },
@@ -112,7 +112,8 @@ $(function() {
 	Q.sheet("ball", "blockbreak.png", { tilew: 20, tileh: 20, sy: 0, sx: 0 });
 	Q.sheet("block", "blockbreak.png", { tilew: 40, tileh: 20, sy: 20, sx: 0 });
 	Q.sheet("paddle", "blockbreak.png", { tilew: 60, tileh: 20, sy: 40, sx: 0 });		 		 
-    Q.scene('game',new Q.Scene(function(stage) {
+	
+	Q.scene('game',new Q.Scene(function(stage) {
       stage.insert(new Q.Paddle());
       stage.insert(new Q.Ball());
 	 
@@ -123,12 +124,31 @@ $(function() {
           blockCount++;
         }
       }
+	  
       stage.on('removeBlock',function() {
         blockCount--;
         if(blockCount == 0) {
           Q.stageScene('winGame');
         }
       });
+	  /////////////////////  
+	  var container = stage.insert(new Q.UI.Container({
+      fill: "black",
+      border: 5,
+      shadow: 10, 
+      shadowColor: "rgba(0,0,0,0.5)",
+      y: 6,
+      x: Q.width/2
+      }));
+	
+      stage.insert(new Q.UI.Text({ 
+      label: "Block Break" ,
+      color: "White",
+      x: 0,
+      y: 0
+      }),container); 
+	  container.fit(10,6); 
+	  /////////////////////////
 		
     }));
 	
