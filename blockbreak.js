@@ -1,4 +1,7 @@
-
+//Alain Vincent
+//CSC 496
+//Homework 4
+//November 4, 2014
 $(function() {
   var Q = window.Q = Quintus({audioSupported: [ 'mp3' ]})
                      .include('Audio,Input,Sprites,Scenes,UI,Touch')
@@ -10,49 +13,27 @@ $(function() {
   Q.input.touchControls({ 
             controls:  [ ['left','<' ],[],[],[],['right','>' ] ]
   });
-	var points = 0; //points to display later
 	
-    Q.load(["bumper.mp3"]);
-    Q.load(["ping.mp3"]);
-    Q.load(["pop.mp3"]);
-	Q.load(["gameOver.mp3"]);
-	Q.load(["winGame.mp3"]);
+  Q.load(["bumper.mp3"]);
+  Q.load(["ping.mp3"]);
+  Q.load(["pop.mp3"]);
+  Q.load(["gameOver.mp3"]);
+  Q.load(["winGame.mp3"]);
   
-  var lives = new Q.UI.Text({ 
-	  label: "Lives: 3",
-      color: "white",
-      x: Q.width - 45,
-      y: 15
-    }); 
-	
-	
-	Q.UI.Text.extend("Lives",{
-    init: function() {
-      this._super({
-        label: "lives: 3",
-        //align: "left",
-        x: Q.width - 45,
-        y: 15,
-        weight: "normal",
-        size:18
-      });
-
-      Q.state.on("change.lives",this,"lives");
-    },
-
-    lives: function(lives) {
-      this.p.label = "lives: " + lives;
-    }
-  });
-  
-	////////////////////////////
-	var points = new Q.UI.Text({
+  var points = new Q.UI.Text({
 		label: "Pts: 0",
 		color: "white",
 		x: 35,
 		y: 15,
 	}); 
 	
+	var lives = new Q.UI.Text({ 
+	  label: "Lives: 3",
+      color: "white",
+      x: Q.width - 45,
+      y: 15
+    });
+  
   Q.Sprite.extend("Paddle", {     // extend Sprite class to create Q.Paddle subclass
     init: function(p) {
       this._super(p, {
@@ -133,8 +114,6 @@ $(function() {
 //			alert("collision with block");
 			col.obj.destroy();
 			this.p.dy *= -1;
-			//point increase
-			Q.state.set("lives",1);
 			Q.stage().trigger('removeBlock');
 			Q.audio.play('pop.mp3');
 		}
@@ -265,13 +244,10 @@ $(function() {
 		}, function() {
 			Q.stageScene('game');
 		}));
-		
 		Q.audio.play('winGame.mp3');
     }));
-	
 	Q.stageScene('startScreen');
   });  
 });
 
 //Fix UI elements
-//Attempt soundtrack again
