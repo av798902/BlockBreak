@@ -183,16 +183,6 @@ $(function() {
     }));
 	
 	Q.scene('startScreen',new Q.Scene(function(stage) {
-		var container = stage.insert(new Q.UI.Container({
-		fill: "grey",
-		border: 5,
-		shadow: 10,
-		shadowColor: "rgba(0,0,0,0.5)",
-		x: 160,  //Q.width/2
-		y: 50 //Q.height/2
-		}));
-		
-		//Take this text out of the container
 		stage.insert(new Q.UI.Text({ 
 		label: "       BLOCK BREAK\n\nMove with L and R arrow",
 		color: "blue",
@@ -200,18 +190,17 @@ $(function() {
 		y: 50
 		})); 
 		
-		//Place in container to have grey background to button
 		stage.insert(new Q.UI.Button({
 		label: "Play Game",
-		x: 0,
-		y: 250
-		},function(){
+		x: Q.width/2,
+		y: 300,
+		fill: "grey", 
+		border: 3, 
+		shadow: 10, 
+		shadowColor: "rgba(0,0,0,0.5)",
+		}, function() {
 			Q.stageScene('game');
-		}),container);	
-		
-		/////////////////////////
-	
-	container.fit(20,20);	
+		}));
 	}));
     
 	Q.scene('gameOver',new Q.Scene(function(stage) {
@@ -220,8 +209,8 @@ $(function() {
 		border: 5,
 		shadow: 10,
 		shadowColor: "rgba(0,0,0,0.5)",
-		y: Q.height/2,
-		x: Q.width/2
+		x: Q.width/2,
+		y: Q.height/2
 		}));
 	
 		stage.insert(new Q.UI.Text({ 
@@ -231,6 +220,19 @@ $(function() {
 		y: 0
 		}),container); 
 		container.fit(Q.width,Q.height); 
+		
+		stage.insert(new Q.UI.Button({
+		label: "Play Again",
+		x: Q.width/2,
+		y: 300,
+		fill: "grey", 
+		border: 3, 
+		shadow: 10, 
+		shadowColor: "rgba(0,0,0,0.5)",
+		}, function() {
+			Q.stageScene('game');
+		}));
+		
 		Q.audio.play('gameOver.mp3');
     }));
 	
@@ -251,12 +253,25 @@ $(function() {
 		y: 0
 		}),container); 
 		container.fit(Q.width,Q.height); 
+		
+		stage.insert(new Q.UI.Button({
+		label: "Play Again",
+		x: Q.width/2,
+		y: 300,
+		fill: "grey", 
+		border: 3, 
+		shadow: 10, 
+		shadowColor: "rgba(0,0,0,0.5)",
+		}, function() {
+			Q.stageScene('game');
+		}));
+		
 		Q.audio.play('winGame.mp3');
     }));
+	
 	Q.stageScene('startScreen');
   });  
 });
 
-//Add button to win and lose screen
 //Fix UI elements
 //Attempt soundtrack again
