@@ -1,15 +1,16 @@
-var points = 0; //points to display later
-var lives = 3; //lives to display later
+
 $(function() {
   var Q = window.Q = Quintus({audioSupported: [ 'mp3' ]})
                      .include('Audio,Input,Sprites,Scenes,UI,Touch')
                      .setup()
+					 .touch()
 					 .enableSound();
 					 
   Q.input.keyboardControls();
   Q.input.touchControls({ 
-            controls:  [ ['left','<' ],[/*'up','^'*/],[],[/*'down','v'*/],['right','>' ] ]
+            controls:  [ ['left','<' ],[],[],[],['right','>' ] ]
   });
+	var points = 0; //points to display later
 	
     Q.load(["bumper.mp3"]);
     Q.load(["ping.mp3"]);
@@ -17,6 +18,41 @@ $(function() {
 	Q.load(["gameOver.mp3"]);
 	Q.load(["winGame.mp3"]);
   
+  var lives = new Q.UI.Text({ 
+	  label: "Lives: 3",
+      color: "white",
+      x: Q.width - 45,
+      y: 15
+    }); 
+	
+	
+	Q.UI.Text.extend("Lives",{
+    init: function() {
+      this._super({
+        label: "lives: 3",
+        //align: "left",
+        x: Q.width - 45,
+        y: 15,
+        weight: "normal",
+        size:18
+      });
+
+      Q.state.on("change.lives",this,"lives");
+    },
+
+    lives: function(lives) {
+      this.p.label = "lives: " + lives;
+    }
+  });
+  
+	////////////////////////////
+	var points = new Q.UI.Text({
+		label: "Pts: 0",
+		color: "white",
+		x: 35,
+		y: 15,
+	}); 
+	
   Q.Sprite.extend("Paddle", {     // extend Sprite class to create Q.Paddle subclass
     init: function(p) {
       this._super(p, {
@@ -82,9 +118,9 @@ $(function() {
 			p.y = 50;
 			p.dy = 1;
 			Q.audio.play('ping.mp3');
-		  } else if(p.y > Q.height) { 
+		  } else if(p.y > Q.height) {
 			Q.stageScene('gameOver');		
-		  }
+			}
 	  });
     },
 	
@@ -97,6 +133,8 @@ $(function() {
 //			alert("collision with block");
 			col.obj.destroy();
 			this.p.dy *= -1;
+			//point increase
+			Q.state.set("lives",1);
 			Q.stage().trigger('removeBlock');
 			Q.audio.play('pop.mp3');
 		}
@@ -139,49 +177,42 @@ $(function() {
           Q.stageScene('winGame');
         }
       });
-	  /////////////////////  
-	  var container = stage.insert(new Q.UI.Container({
-      fill: "black",
-      border: 5,
-      shadow: 10, 
-      shadowColor: "rgba(0,0,0,0.5)",
-      y: 0, //6
-      x: 0 //Q.width/2
-      }));
 	  
-      stage.insert(new Q.UI.Text({ 
-      label: "Pts: " + points ,
-      color: "White",
-      x: 35,
-      y: 15
-      }),container); 
-	  
-	  stage.insert(new Q.UI.Text({
-	  label: "Lives: " + lives ,
-      color: "White",
-      x: Q.width - 45,
-      y: 15
-      }),container); 
-	  
+	  stage.insert(points);
+	  stage.insert(lives);
     }));
 	
 	Q.scene('startScreen',new Q.Scene(function(stage) {
 		var container = stage.insert(new Q.UI.Container({
-		fill: "black",
+		fill: "grey",
 		border: 5,
 		shadow: 10,
 		shadowColor: "rgba(0,0,0,0.5)",
-		y: Q.height/2,
-		x: Q.width/2
+		x: 160,  //Q.width/2
+		y: 50 //Q.height/2
 		}));
-	
+		
+		//Take this text out of the container
 		stage.insert(new Q.UI.Text({ 
 		label: "       BLOCK BREAK\n\nMove with L and R arrow",
 		color: "blue",
+		x: 160,
+		y: 50
+		})); 
+		
+		//Place in container to have grey background to button
+		stage.insert(new Q.UI.Button({
+		label: "Play Game",
 		x: 0,
-		y: 0
-		}),container); 
-    }));
+		y: 250
+		},function(){
+			Q.stageScene('game');
+		}),container);	
+		
+		/////////////////////////
+	
+	container.fit(20,20);	
+	}));
     
 	Q.scene('gameOver',new Q.Scene(function(stage) {
 		var container = stage.insert(new Q.UI.Container({
@@ -222,7 +253,10 @@ $(function() {
 		container.fit(Q.width,Q.height); 
 		Q.audio.play('winGame.mp3');
     }));
-	//Q.stageScene('startScreen');
-    Q.stageScene('game');
+	Q.stageScene('startScreen');
   });  
 });
+
+//Add button to win and lose screen
+//Fix UI elements
+//Attempt soundtrack again
