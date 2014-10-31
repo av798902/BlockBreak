@@ -8,16 +8,14 @@ $(function() {
 					 
   Q.input.keyboardControls();
   Q.input.touchControls({ 
-            controls:  [ ['left','<' ],[],[/*'down','v'*/],[],['right','>' ] ]
+            controls:  [ ['left','<' ],[/*'up','^'*/],[],[/*'down','v'*/],['right','>' ] ]
   });
-	Q.audio.enableHTML5Sound();
-	Q.audio.enableWebAudioSound();
 	
-  //Q.load(["bumper.mp3"]);
-  //Q.load(["ping.mp3"]);
-  //Q.load(["pop.mp3"]);
-  
-  
+    Q.load(["bumper.mp3"]);
+    Q.load(["ping.mp3"]);
+    Q.load(["pop.mp3"]);
+	Q.load(["gameOver.mp3"]);
+	Q.load(["winGame.mp3"]);
   
   Q.Sprite.extend("Paddle", {     // extend Sprite class to create Q.Paddle subclass
     init: function(p) {
@@ -38,7 +36,9 @@ $(function() {
         this.p.x -= dt * this.p.speed;
       } else if(Q.inputs['right']) {
         this.p.x += dt * this.p.speed;
-      }
+      } 
+	  
+	  
       if(this.p.x < 30) { 
         this.p.x = 30;
       } else if(this.p.x > Q.width - 30) { 
@@ -71,14 +71,17 @@ $(function() {
 		  if(p.x < 0) { 
 			p.x = 0;
 			p.dx = 1;
+			Q.audio.play('ping.mp3');
 		  } else if(p.x > Q.width - 10) { 
 			p.dx = -1;
 			p.x = Q.width - p.w;
+			Q.audio.play('ping.mp3');
 		  }
 
 		  if(p.y <= 50) {
 			p.y = 50;
 			p.dy = 1;
+			Q.audio.play('ping.mp3');
 		  } else if(p.y > Q.height) { 
 			Q.stageScene('gameOver');		
 		  }
@@ -89,6 +92,7 @@ $(function() {
 		if (col.obj.isA("Paddle")) {
 //			alert("collision with paddle");
 			this.p.dy = -1;
+			Q.audio.play("bumper.mp3");
 		} else if (col.obj.isA("Block")) {
 //			alert("collision with block");
 			col.obj.destroy();
@@ -141,78 +145,85 @@ $(function() {
       border: 5,
       shadow: 10, 
       shadowColor: "rgba(0,0,0,0.5)",
-      y: 6,
-      x: Q.width/2
+      y: 0, //6
+      x: 0 //Q.width/2
       }));
 	  
       stage.insert(new Q.UI.Text({ 
-      label: "Points: " + points ,
+      label: "Pts: " + points ,
       color: "White",
-      x: 0,
-      y: 0
+      x: 35,
+      y: 15
       }),container); 
-	  //container.fit(Q.height,6); 
-	  /////////////////////////
-		
+	  
+	  stage.insert(new Q.UI.Text({
+	  label: "Lives: " + lives ,
+      color: "White",
+      x: Q.width - 45,
+      y: 15
+      }),container); 
+	  
     }));
 	
 	Q.scene('startScreen',new Q.Scene(function(stage) {
-	var container = stage.insert(new Q.UI.Container({
-      fill: "grey",
-      border: 5,
-      shadow: 10,
-      shadowColor: "rgba(0,0,0,0.5)",
-      y: Q.height/2,
-      x: Q.width/2
-    }));
+		var container = stage.insert(new Q.UI.Container({
+		fill: "grey",
+		border: 5,
+		shadow: 10,
+		shadowColor: "rgba(0,0,0,0.5)",
+		y: Q.height/2,
+		x: Q.width/2
+		}));
 	
-    stage.insert(new Q.UI.Text({ 
-      label: "Block Break",
-      color: "blue",
-      x: 0,
-      y: 0
-    }),container); 
-	container.fit(20,20); 
+		stage.insert(new Q.UI.Text({ 
+		label: "Block Break",
+		color: "blue",
+		x: 0,
+		y: 0
+		}),container); 
+		container.fit(20,20); 
     }));
     
 	Q.scene('gameOver',new Q.Scene(function(stage) {
-	var container = stage.insert(new Q.UI.Container({
-      fill: "black",
-      border: 5,
-      shadow: 10,
-      shadowColor: "rgba(0,0,0,0.5)",
-      y: Q.height/2,
-      x: Q.width/2
-    }));
+		var container = stage.insert(new Q.UI.Container({
+		fill: "red",
+		border: 5,
+		shadow: 10,
+		shadowColor: "rgba(0,0,0,0.5)",
+		y: Q.height/2,
+		x: Q.width/2
+		}));
 	
-    stage.insert(new Q.UI.Text({ 
-      label: "Game Over\n You Lose",
-      color: "white",
-      x: 0,
-      y: 0
-    }),container); 
-	container.fit(Q.width,Q.height); 
+		stage.insert(new Q.UI.Text({ 
+		label: "Game Over\n You Lose",
+		color: "white",
+		x: 0,
+		y: 0
+		}),container); 
+		container.fit(Q.width,Q.height); 
+		Q.audio.play('gameOver.mp3');
     }));
 	
 	Q.scene('winGame',new Q.Scene(function(stage) {
-	var container = stage.insert(new Q.UI.Container({
-      fill: "black",
-      border: 5,
-      shadow: 10,
-      shadowColor: "rgba(0,0,0,0.5)",
-      y: Q.height/2,
-      x: Q.width/2
-    }));
+		var container = stage.insert(new Q.UI.Container({
+		fill: "blue",
+		border: 5,
+		shadow: 10,
+		shadowColor: "rgba(0,0,0,0.5)",
+		y: Q.height/2,
+		x: Q.width/2
+		}));
 	
-    stage.insert(new Q.UI.Text({ 
-      label: "Game Over\n  You Win",
-      color: "white",
-      x: 0,
-      y: 0
-    }),container); 
-	container.fit(Q.width,Q.height); 
+		stage.insert(new Q.UI.Text({ 
+		label: "Game Over\n  You Win",
+		color: "white",
+		x: 0,
+		y: 0
+		}),container); 
+		container.fit(Q.width,Q.height); 
+		Q.audio.play('winGame.mp3');
     }));
-
+	//Q.stageScene('startScreen');
     Q.stageScene('game');
   });  
 });
