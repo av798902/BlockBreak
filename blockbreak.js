@@ -167,7 +167,7 @@ $(function() {
 	
 	Q.scene('startScreen',new Q.Scene(function(stage) {
 		var container = stage.insert(new Q.UI.Container({
-		fill: "grey",
+		fill: "black",
 		border: 5,
 		shadow: 10,
 		shadowColor: "rgba(0,0,0,0.5)",
@@ -176,12 +176,11 @@ $(function() {
 		}));
 	
 		stage.insert(new Q.UI.Text({ 
-		label: "Block Break",
+		label: "       BLOCK BREAK\n\nMove with L and R arrow",
 		color: "blue",
 		x: 0,
 		y: 0
 		}),container); 
-		container.fit(20,20); 
     }));
     
 	Q.scene('gameOver',new Q.Scene(function(stage) {
