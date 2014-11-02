@@ -80,7 +80,8 @@ $(function() {
         dy: -1,
       });
       this.p.y = Q.height / 2 + 20;
-      this.p.x = Q.width / 2 + this.p.w / 2;
+      //this.p.x = Q.width / 2 + this.p.w / 2;
+	  this.p.x = Math.random() * (Q.width - 5) + 5;
 	  
 	  this.on('hit', this, 'collision');  // Listen for hit event and call the collision method
 	  
