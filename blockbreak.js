@@ -52,6 +52,7 @@ $(function() {
       if(Q.input.keypad.size) {
         this.p.y -= Q.input.keypad.size + this.p.h;
       }
+	  
     },
 
     step: function(dt) {
