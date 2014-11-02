@@ -75,7 +75,7 @@ $(function() {
     init: function() {
       this._super({
         sheet: 'ball',
-        speed: 150,
+        speed: 300,
         dx: 1,
         dy: -1,
       });
