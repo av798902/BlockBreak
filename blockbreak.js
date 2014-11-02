@@ -353,8 +353,7 @@ $(function() {
     }));
 	
 	Q.scene('infoPage',new Q.Scene(function(stage) {
-		stage.insert(new Q.UI.Text({ 
-		//or mouse?
+		stage.insert(new Q.UI.Text({
 		label: "   How to move paddle:\nUse L and R arrow keys",
 		color: "white",
 		x: 160,
