@@ -52,9 +52,8 @@ $(function() {
       if(Q.input.keypad.size) {
         this.p.y -= Q.input.keypad.size + this.p.h;
       }
-	  
     },
-
+	 
     step: function(dt) {
       if(Q.inputs['left']) { 
         this.p.x -= dt * this.p.speed;
