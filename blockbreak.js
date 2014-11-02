@@ -106,6 +106,7 @@ $(function() {
 			p.dy = 1;
 			Q.audio.play('ping.mp3');
 		  } else if(p.y > Q.height) {
+			livesNum--;
 			if (livesNum > 0){
 				var containerZ = Q.stage().insert(new Q.UI.Container({
 					fill: "black",
@@ -122,7 +123,6 @@ $(function() {
 					y: 0
 					}),containerZ); 
 				containerZ.fit(3,50);
-				livesNum--;
 				var lives = new Q.UI.Text({ 
 					label: "Lives: " + livesNum,
 					color: "white",
