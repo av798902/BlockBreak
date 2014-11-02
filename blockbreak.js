@@ -2,6 +2,11 @@
 //CSC 496
 //Homework 4
 //November 4, 2014
+
+//Global variables to manipulate
+var pointsNum = 0;
+var livesNum = 3;
+
 $(function() {
   var Q = window.Q = Quintus({audioSupported: [ 'mp3' ]})
                      .include('Audio,Input,Sprites,Scenes,UI,Touch')
@@ -22,18 +27,18 @@ $(function() {
   Q.load(["music.mp3"]);
   
   var points = new Q.UI.Text({
-		label: "Pts: 0",
+		label: "Pts: " + pointsNum,
 		color: "white",
 		x: 35,
 		y: 15,
 	}); 
-
-	var lives = new Q.UI.Text({ 
-	  label: "Lives: 3",
+	
+  var lives = new Q.UI.Text({ 
+	  label: "Lives: " + livesNum,
       color: "white",
       x: Q.width - 45,
       y: 15
-    });
+    });	
    
   Q.Sprite.extend("Paddle", {     // extend Sprite class to create Q.Paddle subclass
     init: function(p) {
@@ -116,9 +121,34 @@ $(function() {
 //			alert("collision with block");
 			col.obj.destroy();
 			this.p.dy *= -1;
-			Q.stage().trigger('removeBlock');
 			Q.audio.play('pop.mp3');
-		}
+		    var containerZ = Q.stage().insert(new Q.UI.Container({
+				fill: "black",
+				border: 5,
+				shadow: 10,
+				shadowColor: "rgba(0,0,0,0.5)",
+				x: 50,
+				y: 10
+			}));
+			Q.stage().insert(new Q.UI.Text({ 
+				label: " ",
+				color: "white",
+				x: 0,
+				y: 0
+				}),containerZ); 
+			containerZ.fit(3,40);
+
+			pointsNum += 10;
+			var points = new Q.UI.Text({
+				label: "Pts: " + pointsNum,
+				color: "white",
+				x: 45,
+				y: 15,
+				}); 
+			Q.stage().insert(points);
+			Q.stage().trigger('removeBlock');
+			
+		}	
 	}
   });
 
@@ -144,6 +174,8 @@ $(function() {
       stage.insert(new Q.Paddle());
       stage.insert(new Q.Ball());
 	  Q.audio.play('music.mp3',{ loop: true });
+	  pointsNum = 0;
+	  livesNum = 3;
       var blockCount=0;
       for(var x=0;x<6;x++) {
         for(var y=0;y<5;y++) {
@@ -153,13 +185,14 @@ $(function() {
       }
 	  
       stage.on('removeBlock',function() {
-        blockCount--;
+		blockCount--;
         if(blockCount == 0) {
+		  Q.stage().remove(points);
 		  Q.audio.stop('music.mp3');
           Q.stageScene('winGame');
         }
       });
-	  
+
 	  stage.insert(points);
 	  stage.insert(lives);
     }));
@@ -203,7 +236,7 @@ $(function() {
 		y: 0
 		}),container); 
 		container.fit(Q.width,Q.height); 
-		
+
 		stage.insert(new Q.UI.Button({
 		label: "Play Again",
 		x: Q.width/2,
@@ -248,6 +281,7 @@ $(function() {
 		}, function() {
 			Q.stageScene('game');
 		}));
+		
 		Q.audio.play('winGame.mp3');
     }));
 	Q.stageScene('startScreen');
