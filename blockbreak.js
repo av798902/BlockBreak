@@ -19,6 +19,7 @@ $(function() {
   Q.load(["pop.mp3"]);
   Q.load(["gameOver.mp3"]);
   Q.load(["winGame.mp3"]);
+  Q.load(["music.mp3"]);
   
   var points = new Q.UI.Text({
 		label: "Pts: 0",
@@ -26,14 +27,14 @@ $(function() {
 		x: 35,
 		y: 15,
 	}); 
-	
+
 	var lives = new Q.UI.Text({ 
 	  label: "Lives: 3",
       color: "white",
       x: Q.width - 45,
       y: 15
     });
-  
+   
   Q.Sprite.extend("Paddle", {     // extend Sprite class to create Q.Paddle subclass
     init: function(p) {
       this._super(p, {
@@ -100,6 +101,7 @@ $(function() {
 			p.dy = 1;
 			Q.audio.play('ping.mp3');
 		  } else if(p.y > Q.height) {
+		    Q.audio.stop('music.mp3');
 			Q.stageScene('gameOver');		
 			}
 	  });
@@ -141,7 +143,7 @@ $(function() {
 	Q.scene('game',new Q.Scene(function(stage) {
       stage.insert(new Q.Paddle());
       stage.insert(new Q.Ball());
-	 
+	  Q.audio.play('music.mp3',{ loop: true });
       var blockCount=0;
       for(var x=0;x<6;x++) {
         for(var y=0;y<5;y++) {
@@ -153,6 +155,7 @@ $(function() {
       stage.on('removeBlock',function() {
         blockCount--;
         if(blockCount == 0) {
+		  Q.audio.stop('music.mp3');
           Q.stageScene('winGame');
         }
       });
@@ -180,6 +183,7 @@ $(function() {
 		}, function() {
 			Q.stageScene('game');
 		}));
+		
 	}));
     
 	Q.scene('gameOver',new Q.Scene(function(stage) {
@@ -249,5 +253,3 @@ $(function() {
 	Q.stageScene('startScreen');
   });  
 });
-
-//Fix UI elements
