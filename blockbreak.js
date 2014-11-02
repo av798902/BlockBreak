@@ -228,12 +228,26 @@ $(function() {
     }));
 	
 	Q.scene('startScreen',new Q.Scene(function(stage) {
+		Q.audio.stop('winGame.mp3');
+	    Q.audio.stop('gameOver.mp3');
 		stage.insert(new Q.UI.Text({ 
 		label: "       BLOCK BREAK\n\nMove with L and R arrow",
 		color: "blue",
 		x: 160,
 		y: 50
 		})); 
+		
+		stage.insert(new Q.UI.Button({
+		label: "About Game",
+		x: Q.width/2,
+		y: 225,
+		fill: "grey", 
+		border: 3, 
+		shadow: 10, 
+		shadowColor: "rgba(0,0,0,0.5)",
+		}, function() {
+			Q.stageScene('infoPage');
+		}));
 		
 		stage.insert(new Q.UI.Button({
 		label: "Play Game",
@@ -279,6 +293,18 @@ $(function() {
 			Q.stageScene('game');
 		}));
 		
+		stage.insert(new Q.UI.Button({
+		label: "Title Screen",
+		x: Q.width/2,
+		y: 375,
+		fill: "grey", 
+		border: 3, 
+		shadow: 10, 
+		shadowColor: "rgba(0,0,0,0.5)",
+		}, function() {
+			Q.stageScene('startScreen');
+		}));
+		
 		Q.audio.play('gameOver.mp3');
     }));
 	
@@ -312,8 +338,75 @@ $(function() {
 			Q.stageScene('game');
 		}));
 		
+		stage.insert(new Q.UI.Button({
+		label: "Title Screen",
+		x: Q.width/2,
+		y: 375,
+		fill: "grey", 
+		border: 3, 
+		shadow: 10, 
+		shadowColor: "rgba(0,0,0,0.5)",
+		}, function() {
+			Q.stageScene('startScreen');
+		}));
+		
 		Q.audio.play('winGame.mp3');
     }));
+	
+	Q.scene('infoPage',new Q.Scene(function(stage) {
+		stage.insert(new Q.UI.Text({ 
+		//or mouse?
+		label: "   How to move paddle:\nUse L and R arrow keys",
+		color: "white",
+		x: 160,
+		y: 50
+		})); 
+		
+		stage.insert(new Q.UI.Text({ 
+		label: "You have 3 lives \nto beat the game",
+		color: "red",
+		x: 160,
+		y: 125
+		})); 
+		
+		stage.insert(new Q.UI.Text({ 
+		label: "        Win or lose:\nHit a button to replay",
+		color: "white",
+		x: 160,
+		y: 200
+		})); 
+		
+		stage.insert(new Q.UI.Text({ 
+		label: "The game uses sound!\n   Put your volume up",
+		color: "red",
+		x: 160,
+		y: 275
+		})); 
+		
+		stage.insert(new Q.UI.Button({
+		label: "Title Screen",
+		x: 85,
+		y: 375,
+		fill: "grey", 
+		border: 3, 
+		shadow: 10, 
+		shadowColor: "rgba(0,0,0,0.5)",
+		}, function() {
+			Q.stageScene('startScreen');
+		}));
+		
+		stage.insert(new Q.UI.Button({
+		label: "Play Game",
+		x: 237,
+		y: 375,
+		fill: "grey", 
+		border: 3, 
+		shadow: 10, 
+		shadowColor: "rgba(0,0,0,0.5)",
+		}, function() {
+			Q.stageScene('game');
+		}));
+	}));	
 	Q.stageScene('startScreen');
   });  
 });
