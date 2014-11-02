@@ -108,7 +108,7 @@ $(function() {
 		  } else if(p.y > Q.height) {
 			if (livesNum > 0){
 				var containerZ = Q.stage().insert(new Q.UI.Container({
-					fill: "grey",
+					fill: "black",
 					border: 5,
 					shadow: 10,
 					shadowColor: "rgba(0,0,0,0.5)",
