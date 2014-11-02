@@ -173,6 +173,8 @@ $(function() {
 	Q.scene('game',new Q.Scene(function(stage) {
       stage.insert(new Q.Paddle());
       stage.insert(new Q.Ball());
+	  Q.audio.stop('winGame.mp3');
+	  Q.audio.stop('gameOver.mp3');
 	  Q.audio.play('music.mp3',{ loop: true });
 	  pointsNum = 0;
 	  livesNum = 3;
