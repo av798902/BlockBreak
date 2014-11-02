@@ -106,8 +106,36 @@ $(function() {
 			p.dy = 1;
 			Q.audio.play('ping.mp3');
 		  } else if(p.y > Q.height) {
-		    Q.audio.stop('music.mp3');
-			Q.stageScene('gameOver');		
+			if (livesNum > 0){
+				var containerZ = Q.stage().insert(new Q.UI.Container({
+					fill: "grey",
+					border: 5,
+					shadow: 10,
+					shadowColor: "rgba(0,0,0,0.5)",
+					x: Q.width - 50,
+					y: 10
+				}));
+				Q.stage().insert(new Q.UI.Text({ 
+					label: " ",
+					color: "white",
+					x: 0,
+					y: 0
+					}),containerZ); 
+				containerZ.fit(3,50);
+				livesNum--;
+				var lives = new Q.UI.Text({ 
+					label: "Lives: " + livesNum,
+					color: "white",
+					x: Q.width - 45,
+					y: 15
+				});	
+				Q.stage().insert(lives);
+				this.destroy();
+				Q.stage().insert(new Q.Ball());
+			} else if (livesNum == 0) {
+				Q.audio.stop('music.mp3');
+				Q.stageScene('gameOver');
+			}
 			}
 	  });
     },
@@ -122,7 +150,7 @@ $(function() {
 			col.obj.destroy();
 			this.p.dy *= -1;
 			Q.audio.play('pop.mp3');
-		    var containerZ = Q.stage().insert(new Q.UI.Container({
+		    var containerY = Q.stage().insert(new Q.UI.Container({
 				fill: "black",
 				border: 5,
 				shadow: 10,
@@ -135,9 +163,8 @@ $(function() {
 				color: "white",
 				x: 0,
 				y: 0
-				}),containerZ); 
-			containerZ.fit(3,40);
-
+				}),containerY); 
+			containerY.fit(3,40);
 			pointsNum += 10;
 			var points = new Q.UI.Text({
 				label: "Pts: " + pointsNum,
@@ -189,7 +216,6 @@ $(function() {
       stage.on('removeBlock',function() {
 		blockCount--;
         if(blockCount == 0) {
-		  Q.stage().remove(points);
 		  Q.audio.stop('music.mp3');
           Q.stageScene('winGame');
         }
